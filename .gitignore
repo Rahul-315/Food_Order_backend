@@ -1,0 +1,66 @@
+### Eclipse Workspace ###
+.metadata/
+
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# accidental file
+README.mdgit
+### Eclipse Workspace ###
+.metadata/
+
+### STS / Eclipse ###
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+### Maven ###
+target/
+*.class
+*.jar
+
+### Node / Frontend ###
+node_modules/
+dist/
+build/
+
+### IDEs ###
+.idea/
+.vscode/
+
+### OS ###
+Thumbs.db
+.DS_Store
