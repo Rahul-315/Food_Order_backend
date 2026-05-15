@@ -1,27 +1,36 @@
 package com.online.ofos.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import com.sendgrid.*;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import java.io.IOException;
 
 @Service
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    @Value("${sendgrid.api.key}")
+    private String sendGridApiKey;
 
     @Async("taskExecutor")
     public void send(String to, String subject, String body) {
         try {
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setTo(to);
-            msg.setSubject(subject);
-            msg.setText(body);
-            mailSender.send(msg);
-        } catch (Exception e) {
-       
+            Email from = new Email("quickbite.service0@gmail.com");
+            Email toEmail = new Email(to);
+            Content content = new Content("text/plain", body);
+            Mail mail = new Mail(from, subject, toEmail, content);
+
+            SendGrid sg = new SendGrid(sendGridApiKey);
+            Request request = new Request();
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+            System.out.println("Email sent to " + to + " | Status: " + response.getStatusCode());
+        } catch (IOException e) {
             System.err.println("Failed to send email to " + to + ": " + e.getMessage());
         }
     }
@@ -78,6 +87,7 @@ public class EmailService {
             "– Team QuickBite"
         );
     }
+
     public void sendPasswordResetOtp(String email, String otp) {
         send(
             email,
@@ -85,9 +95,8 @@ public class EmailService {
             "Your OTP to reset password is:\n\n" +
             otp + "\n\n" +
             "This OTP is valid for 3 minutes.\n\n" +
-            "If you didn’t request this, ignore this email.\n\n" +
+            "If you didn't request this, ignore this email.\n\n" +
             "– Team QuickBite"
         );
     }
-
 }
